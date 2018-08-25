@@ -7,13 +7,21 @@ function Menu(props) {
     const renderMenuItem = ({item, index}) => {
 
         return (
-                <ListItem
-                    key={index}
-                    title={item.name}
-                    subtitle={item.description}
-                    hideChevron={true}
-                    leftAvatar={{ source: require('../shared/images/uthappizza.png')}}
-                  />
+            <ListItem
+            key={index}
+            title={item.name}
+            subtitle={item.description}
+            hideChevron={true}
+            onPress={() => props.onPress(item.id)}
+            leftAvatar={{ source: require('../shared/images/uthappizza.png')}}
+          />
+                // <ListItem
+                //     key={index}
+                //     title={item.name}
+                //     subtitle={item.description}
+                //     hideChevron={true}
+                //     leftAvatar={{ source: require('../shared/images/uthappizza.png')}}
+                //   />
         );
     };
 
