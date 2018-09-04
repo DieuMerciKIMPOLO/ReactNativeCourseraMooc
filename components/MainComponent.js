@@ -8,7 +8,15 @@ import Home from './HomeComponent';
 
 
 const MenuNavigator=createStackNavigator({
-Menu:{screen:Menu},
+Menu:{screen:Menu,
+navigationOptions:({navigation})=>({
+headerLeft:<Icon
+name="menu"
+size={24}
+color="white"
+onPress={()=> navigation.toggleDrawer()}
+/>
+})},
 Dishdetail:{screen:Dishdetail}
 },
 {
