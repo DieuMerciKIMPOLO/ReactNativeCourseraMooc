@@ -3,14 +3,22 @@ import { Text, ScrollView, View } from 'react-native';
 import { Card} from 'react-native-elements';
 import { ListItem } from 'react-native-elements';
 import { LEADERS } from '../shared/leaders';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
 
-class About extends Component {
-    constructor(props){
-        super(props);
-        this.state={
-            leaders:LEADERS
-        }
+const mapStateToProps = state => {
+    return {
+      leaders: state.leaders
     }
+  }
+  
+class About extends Component {
+    // constructor(props){
+    //     super(props);
+    //     this.state={
+    //         leaders:LEADERS
+    //     }
+    // }
     static navigationOptions = {
         title: 'About Us',
     };
@@ -28,13 +36,14 @@ class About extends Component {
                       </Card>
                       <Card title="Corporate Leadership">
                         {
-                            this.state.leaders.map((item, index)=>{
+                            this.props.leaders.leaders.map((item, index)=>{
                                 return(
                                 <ListItem
                                     key={index}
                                     title={item.name}
                                     subtitle={item.description}
-                                    leftAvatar={{ source: require('./images/alberto.png')}}
+                                    leftAvatar={{source: {uri: baseUrl + item.image}}}
+                                    // leftAvatar={{ source: require('./images/alberto.png')}}
                                   />
                                 )
                             })
@@ -45,4 +54,4 @@ class About extends Component {
     }
 }
 
-export default About;
+export default connect(mapStateToProps)(About);
