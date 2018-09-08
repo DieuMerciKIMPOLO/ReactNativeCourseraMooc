@@ -3,7 +3,7 @@ import { View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { DISHES } from '../shared/dishes';
 import { Tile } from 'react-native-elements';
-
+import { Loading } from './LoadingComponent';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 
@@ -52,11 +52,7 @@ render(){
         renderItem={renderMenuItem}
         keyExtractor={item => item.id.toString()}
         />
-        // <FlatList 
-        //     data={this.state.dishes}
-        //     renderItem={renderMenuItem}
-        //     keyExtractor={item => item.id.toString()}
-        //     />
+
 )}
 
 }
