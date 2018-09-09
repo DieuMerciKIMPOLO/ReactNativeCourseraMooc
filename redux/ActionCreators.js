@@ -153,3 +153,14 @@ export const addLeaders = (leaders) => ({
     type: ActionTypes.ADD_LEADERS,
     payload: leaders
 });
+/*This function allows us to post a new comment in the store */
+export const postComment=(dishId, rating, author, comment, commentId)=>(dispatch)=>{
+    setTimeout(() => {
+        dispatch(addComment(dishId, rating, author,comment, commentId));
+    }, 2000);
+}
+/*The function in charge to dispatch addComment action */
+export const addComment=(dishId, rating, author,comment,commentId)=>({
+    type: ActionTypes.ADD_COMMENT,
+    payload: {id:commentId,comment:comment, dishId:dishId,rating:rating, author:author, date:new Date()} 
+})
