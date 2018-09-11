@@ -6,6 +6,7 @@ import { Tile } from 'react-native-elements';
 import { Loading } from './LoadingComponent';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -27,6 +28,7 @@ class Menu extends Component {
 render(){
     const renderMenuItem = ({item, index}) => {
         return (
+            <Animatable.View animation="fadeInRightBig" duration={2000}>                
             <Tile
                 key={index}
                 title={item.name}
@@ -34,15 +36,16 @@ render(){
                 featured
                 onPress={() => navigate('Dishdetail', { dishId: item.id })}
                 imageSrc={{ uri: baseUrl + item.image}}
-            />
-        //     <ListItem
-        //     key={index}
-        //     title={item.name}
-        //     subtitle={item.description}
-        //     hideChevron={true}
-        //     onPress={() => navigate('Dishdetail', {dishId:item.id})}
-        //     leftAvatar={{ source: require('../shared/images/uthappizza.png')}}
-        //   />
+                />
+            </Animatable.View>
+            // <Tile
+            //     key={index}
+            //     title={item.name}
+            //     caption={item.description}
+            //     featured
+            //     onPress={() => navigate('Dishdetail', { dishId: item.id })}
+            //     imageSrc={{ uri: baseUrl + item.image}}
+            // />
         );
     }
     const {navigate}= this.props.navigation;
