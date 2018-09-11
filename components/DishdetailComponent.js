@@ -48,6 +48,8 @@ function RenderComments(props) {
         
     );
 }
+handleViewRef = ref => this.view = ref;
+// onPanResponderGrant: () => {this.view.rubberBand(1000).then(endState => console.log(endState.finished ? 'finished' : 'cancelled'));},
 function RenderDish(props) {
 
     const dish = props.dish;
@@ -83,7 +85,8 @@ function RenderDish(props) {
     if (dish != null) {
         return(
             <Animatable.View animation="fadeInDown" duration={2000} delay={1000}
-            {...panResponder.panHandlers}>
+                ref={this.handleViewRef}
+                {...panResponder.panHandlers}>
             <Card
                 featuredTitle={dish.name}
                 image={{uri: baseUrl + dish.image}}>
@@ -234,3 +237,4 @@ class Dishdetail extends Component  {
     
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dishdetail);
+
