@@ -6,10 +6,28 @@ import { comments } from './comments';
 import { promotions } from './promotions';
 import { leaders } from './leaders';
 import { favorites } from './favorites';
+// ////// redux-persist
+import { persistStore, persistCombineReducers } from 'redux-persist';
+import storage from 'redux-persist/es/storage';
+
+const config = {
+    key: 'root',
+    storage,
+    debug: true
+  }
+//////// redux-persist
 
 export const ConfigureStore = () => {
+    // const store = createStore(
+    //     combineReducers({
+    //         dishes,
+    //         comments,
+    //         promotions,
+    //         leaders,
+    //         favorites
+    //     }),
     const store = createStore(
-        combineReducers({
+        persistCombineReducers(config, {
             dishes,
             comments,
             promotions,
@@ -18,6 +36,7 @@ export const ConfigureStore = () => {
         }),
         applyMiddleware(thunk, logger)
     );
+    const persistor = persistStore(store)
 
-    return store;
+    return { persistor, store };
 }
