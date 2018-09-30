@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button,Modal } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button,Modal,Alert } from 'react-native';
 import { Card } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker'
-import { Permissions, Notifications } from 'expo';
+// comment
+import { Permissions, Notifications,Calendar } from 'expo';
+
+import * as Animatable from 'react-native-animatable';
 
 class Reservation extends Component {
 
@@ -26,9 +29,19 @@ class Reservation extends Component {
 
     handleReservation() {
         console.log(JSON.stringify(this.state));
-        const date=new Date();
-        this.presentLocalNotification(date)
-        this.toggleModal();
+        Alert.alert(
+            'Your Reservation OK?',
+            'Number of guests:' + this.state.guest + ' \n Smoking?'+this.state.smoking+'\n Date and Time:'+this.state.date,
+            [
+            {text: 'Cancel', onPress: () =>this.resetForm() },
+            {text: 'OK', onPress: () => this.addReservationToCalendar(this.state.date)},
+            ],
+            { cancelable: false }
+        );
+        // console.log(JSON.stringify(this.state));
+        // const date=new Date();
+        // this.presentLocalNotification(date)
+        // this.toggleModal();
     }
 
     resetForm() {
@@ -39,6 +52,43 @@ class Reservation extends Component {
             showModal: false
         });
     }
+    async obtainCalendarPermission(){
+        let permission=await Permissions.askAsync(Permissions.CALENDAR);
+        return permission
+      }
+    //   addReservationToCalendar= async (date) =>{
+    //       await this.obtainCalendarPermission();
+    //       Calendar.createEventAsync(Calendar.DEFAULT.toString(),{'title': 'Con Fusion Table Reservation',
+    //       'startDate':Date(Date.parse(date)),'endDate':Date(Date.parse(date)+2*60*60*1000),
+    //       'timeZone':'Asia/Hong_Kong','location':'121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+    //       })
+    //   }
+    async addReservationToCalendar(date) {
+        startDate = '';
+        if (date === '') {
+            startDate = new Date();
+        } else {
+            startDate = new Date(date)
+        }
+        endDate = new Date(Date.parse(startDate) + 2 * 60 * 60 * 1000);
+        if (await this.obtainCalendarPermission()) {
+            console.log('permission granted succesfully');
+            const flag = Calendar.createEventAsync(Calendar.DEFAULT, {
+                title: 'Con Fusion Table Reservation',
+                startDate: startDate,
+                endDate: endDate,
+                timeZone: 'Asia/Hong_Kong',
+                location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+            }).then(event => {
+                console.log('success', event);
+            })
+                .catch(error => {
+                    console.log('failure', error);
+                });
+            console.log('Calender Event Id - ' + flag)
+        }
+    }
+    // comments
     async obtainNotificationPermission() {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
         if (permission.status !== 'granted') {
@@ -65,10 +115,12 @@ class Reservation extends Component {
             }
         });
     }
+ 
+    // omments
     render() {
         return(
-            <ScrollView>
-              
+            // <ScrollView>
+            <Animatable.View animation="zoomIn" duration={2000} delay={1000}> 
                 <View style={styles.formRow}>
                 <Text style={styles.formLabel}>Number of Guests</Text>
                 <Picker
@@ -143,7 +195,8 @@ class Reservation extends Component {
                         />
                 </View>
             </Modal>
-            </ScrollView>
+            </Animatable.View> 
+           
         );
     }
 

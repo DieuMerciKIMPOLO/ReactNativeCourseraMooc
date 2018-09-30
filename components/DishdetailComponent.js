@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Text, View, ScrollView, FlatList,StyleSheet, Button,Modal, Alert,PanResponder } from 'react-native';
+import { Text, View, ScrollView, FlatList,StyleSheet, Button,Modal, Alert,PanResponder,Share } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
@@ -60,7 +60,12 @@ function RenderDish(props) {
         else
             return false;
     }
-
+    const recognizeDrag2 =({moveX, moveY, dx,dy})=>{
+        if(dx > 200)
+          return true;
+        else
+         return false;
+    }
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: (e, gestureState) => {
             return true;
@@ -77,11 +82,20 @@ function RenderDish(props) {
                     ],
                     { cancelable: false }
                 );
-
+            if(recognizeDrag2(gestureState))
+                props.toggleModal();
             return true;
         }
     })
-
+    const shareDish = (title, message, url) => {
+        Share.share({
+            title: title,
+            message: title + ': ' + message + ' ' + url,
+            url: url
+        },{
+            dialogTitle: 'Share ' + title
+        })
+    }
     if (dish != null) {
         return(
             <Animatable.View animation="fadeInDown" duration={2000} delay={1000}
@@ -102,6 +116,14 @@ function RenderDish(props) {
                         color='#f50'
                         onPress={() => props.favorite ? console.log('Already favorite') : props.onPress()}
                         />
+                    <Icon
+                        raised
+                        reverse
+                        name='share'
+                        type='font-awesome'
+                        color='#51D2A8'
+                        // style={styles.cardItem}
+                        onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)} />
                         <Icon
                         raised
                         reverse
@@ -145,6 +167,7 @@ class Dishdetail extends Component  {
     static navigationOptions ={
         title: 'Dish Details'
     }
+    
     /* This function allow me to set in my state the current value of the rating field*/
     getCurrentRate(rating) {
         console.log("Rating is: " + rating)
